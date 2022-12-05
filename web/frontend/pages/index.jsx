@@ -79,7 +79,7 @@ export default function HomePage() {
                 if (selected==2)
                      return <Instructions/>
                 if (selected==3)
-                     return <StoreLists/>
+                     return <ImportExport/>
                 if (selected==4)
                      return <Support />
                 if (selected==5)
