@@ -3,6 +3,7 @@ import {useState, useCallback, React} from 'react';
 import { StoreLists } from "../components";
 import { StoreSettings } from '../components';
 import { Instructions } from '../components';
+import { ImportExport } from '../components';
 
 export default function HomePage() {
 
@@ -80,7 +81,7 @@ export default function HomePage() {
                 if (selected==2)
                      return <Instructions/>
                 if (selected==3)
-                     return <StoreLists/>
+                     return <ImportExport/>
                 if (selected==4)
                      return <StoreLists/>
                 else 
