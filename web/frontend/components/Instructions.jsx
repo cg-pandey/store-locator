@@ -1,18 +1,30 @@
-import {Page, Link, Card} from '@shopify/polaris';
+import {Page, Link, Card, Select} from '@shopify/polaris';
 import React from 'react';
+import {useState, useCallback} from 'react';
 
 export function Instructions() {
+
+  const [selected, setSelected] = useState();
+  const handleSelectChange = useCallback((value) => setSelected(value), []);
+  const options = [
+    {label: 'Today', value: 'today'},
+    {label: 'Yesterday', value: 'yesterday'},
+    {label: 'Last 7 days', value: 'lastWeek'},
+  ];
+
   return (
     <Page fullWidth>
       
           <Card title="Select Your Page" sectioned>
             <p>
-              Use to follow a normal section with a secondary section to create
-              a 2/3 + 1/3 layout on detail pages (such as individual product or
-              order pages). Can also be used on any page that needs to structure
-              a lot of content. This layout stacks the columns on small screens.
+            <Select
+                label="Select Page"
+                options={options}
+                onChange={handleSelectChange}
+                value={selected}
+            />
             </p>
-            <p>Add New Page <Link url="/admin/pages">fulfilling orders</Link> </p>
+            <p>Add New Page <Link url="/admin/pages">Click Here</Link> </p>
           </Card>
         
           <Card title="Via Element ID" sectioned>
