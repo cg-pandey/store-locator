@@ -1,8 +1,7 @@
 import {Page, Button, Card, Tabs} from '@shopify/polaris';
 import {useState, useCallback, React} from 'react';
-import { StoreLists } from "../components";
-import { StoreSettings } from '../components';
-import { Instructions } from '../components';
+import { AddStore, StoreLists, Support, StoreSettings, Instructions } from "../components";
+
 
 export default function HomePage() {
 
@@ -82,8 +81,10 @@ export default function HomePage() {
                 if (selected==3)
                      return <StoreLists/>
                 if (selected==4)
-                     return <StoreLists/>
-                else 
+                     return <Support />
+                if (selected==5)
+                     return <AddStore />
+                else
                     return <StoreLists/>
             })()
           }       
