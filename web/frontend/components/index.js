@@ -7,7 +7,6 @@ export { Support } from './Support';
 export { AddStore } from './AddStore';
 export { ImportExport } from './ImportExport';
 export { StoreListItems } from './StoreListItems';
-export { PagesCard } from './pagesFetch.jsx';
 
 
 

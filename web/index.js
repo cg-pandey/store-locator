@@ -123,19 +123,19 @@ export async function createServer(
     res.status(200).send(countData);
   });
 
-  app.get("/api/products/", async (req, res) => {
+  app.get("/api/pages", async (req, res) => {
     const session = await Shopify.Utils.loadCurrentSession(
       req,
       res,
       app.get("use-online-tokens")
     );
-    const Products  = await import(
+    const { Page } = await import(
       `@shopify/shopify-api/dist/rest-resources/${Shopify.Context.API_VERSION}/index.js`
     );
 
-    console.log(await Products.Page.count({ session }),'Products');
-    const countData = await Products.all({ session });
-    console.log(countData,'jkkk')
+    // console.log(Page,'pages');
+    const countData = await Page.all({ session });
+    // console.log(countData,'jkkk')
     res.status(200).send(countData);
   });
 

@@ -1,27 +1,26 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
-  Card,
-  Heading,
-  TextContainer,
-  DisplayText,
-  TextStyle,
+    Select
 } from "@shopify/polaris";
 import { Toast } from "@shopify/app-bridge-react";
 import { useAppQuery, useAuthenticatedFetch } from "../hooks";
 
 export function PagesCard() {
   const emptyToastProps = { content: null };
-//   const [isLoading, setIsLoading] = useState(true);
+  const [optionsValues, setOptionsValues] = useState(['Select']);
+  const [isLoading, setIsLoading] = useState(true);
   const [toastProps, setToastProps] = useState(emptyToastProps);
   const fetch = useAuthenticatedFetch();
+  const [selected, setSelected] = useState();
+  const handleSelectChange = useCallback((value) => setSelected(value), []);
 
-  const {
+ const {
     data,
     refetch: refetchProductCount,
     isLoading: isLoadingCount,
     isRefetching: isRefetchingCount,
   } = useAppQuery({
-    url: `/api/products/`,
+    url: `/api/pages`,
     reactQueryOptions: {
       onSuccess: () => {
         setIsLoading(false);
@@ -29,30 +28,26 @@ export function PagesCard() {
     },
   });
 
-  console.log(data, refetchProductCount,'ddd',isLoadingCount, 'gg',isRefetchingCount,'jkkkk')
+//   console.log(data, refetchProductCount,'ddd',isLoadingCount, 'gg',isRefetchingCount,'pagesfetch')
 
-  const toastMarkup = toastProps.content && !isRefetchingCount && (
-    <Toast {...toastProps} onDismiss={() => setToastProps(emptyToastProps)} />
-  );
+useEffect(async () => {
+    await refetchProductCount()
+    let optionsValues = data.map(page => {
+        return {label : page.title, value : page.handle};
+       });
+    setOptionsValues(optionsValues);
+  }, [data]);
 
-  return (
+
+   return (
     <>
-      {toastMarkup}
-      <Card
-        title="Product Counter"
-        sectioned
-        >
-        <TextContainer spacing="loose">
-          <Heading element="h4">
-            TOTAL Pages
-            <DisplayText size="medium">
-              <TextStyle variation="strong">
-                {isLoadingCount ? "-" : data.count}
-              </TextStyle>
-            </DisplayText>
-          </Heading>
-        </TextContainer>
-      </Card>
+      <Select
+                label="Select Page"
+                style={{padding:'10px'}}
+                options={optionsValues}
+                onChange={handleSelectChange}
+                value={selected}
+            />
     </>
   );
 }
