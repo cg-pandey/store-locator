@@ -1,5 +1,6 @@
-import {EmptyState, Card, ResourceList, Filters, Button, Avatar, Subheading } from '@shopify/polaris';
+import { Card, ResourceList, Filters, Button, Subheading } from '@shopify/polaris';
 import {useState, useCallback} from 'react';
+import { usePlacesWidget } from "react-google-autocomplete";
 
 export function StoreLists() {
   const [queryValue, setQueryValue] = useState(null);
@@ -20,8 +21,9 @@ export function StoreLists() {
     (value) => setQueryValue(value),
     [],
   );
-  
 
+   
+  
   return (
     <div style={{height: '568px'}}>
       <Card>
@@ -34,6 +36,7 @@ export function StoreLists() {
               filters={filters}
               hideQueryField = {0}
               onQueryChange={handleQueryValueChange}
+              
             >
               <div style={{paddingLeft: '8px'}}>
                 <Button onClick={() => console.log('New filter saved')}>

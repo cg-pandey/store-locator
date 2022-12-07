@@ -1,6 +1,8 @@
 import {Page, Link, Card, Select} from '@shopify/polaris';
+
 import React from 'react';
 import {useState, useCallback} from 'react';
+// import {Provider, ResourcePicker} from '@shopify/app-bridge-react';
 
 export function Instructions() {
 
@@ -11,11 +13,27 @@ export function Instructions() {
     {label: 'Yesterday', value: 'yesterday'},
     {label: 'Last 7 days', value: 'lastWeek'},
   ];
+  const [appBridgeConfig] = useState(() => {
+    const host =
+      new URLSearchParams(location.search).get("host") ||
+      window.__SHOPIFY_DEV_HOST;
+
+    window.__SHOPIFY_DEV_HOST = host;
+
+    return {
+      host,
+      apiKey: process.env.SHOPIFY_API_KEY,
+      forceRedirect: true,
+    };
+  });
 
   return (
     <Page fullWidth>
       
           <Card title="Select Your Page" sectioned>
+            {/* <Provider config={appBridgeConfig}>
+            <ResourcePicker resourceType="Product" open />
+            </Provider> */}
             <p>
               <Select
                   label="Select Page"
