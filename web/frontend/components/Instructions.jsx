@@ -17,12 +17,12 @@ export function Instructions() {
       
           <Card title="Select Your Page" sectioned>
             <p>
-            <Select
-                label="Select Page"
-                options={options}
-                onChange={handleSelectChange}
-                value={selected}
-            />
+              <Select
+                  label="Select Page"
+                  options={options}
+                  onChange={handleSelectChange}
+                  value={selected}
+              />
             </p>
             <p>Add New Page <Link url="/admin/pages">Click Here</Link> </p>
           </Card>
