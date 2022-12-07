@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@shopify/app": "3.24.1",
-    "@shopify/cli": "3.24.1"
+    "@shopify/cli": "3.24.1",
+    "react-google-autocomplete": "^2.7.1"
   },
   "author": "Admin"
 }

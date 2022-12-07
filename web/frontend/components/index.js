@@ -5,6 +5,9 @@ export { DropZoneUpload } from './DropZoneUpload';
 export { Instructions } from './Instructions';
 export { Support } from './Support';
 export { AddStore } from './AddStore';
+export { ImportExport } from './ImportExport';
+export { StoreListItems } from './StoreListItems';
+export { PagesCard } from './pagesFetch.jsx';
 
 
 

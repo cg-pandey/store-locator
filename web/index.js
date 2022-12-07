@@ -11,7 +11,7 @@ import { setupGDPRWebHooks } from "./gdpr.js";
 import productCreator from "./helpers/product-creator.js";
 import redirectToAuth from "./helpers/redirect-to-auth.js";
 import { BillingInterval } from "./helpers/ensure-billing.js";
-import { AppInstallations } from "./app_installations.js";
+import { AppInstallations } from "./app_installations.js";  
 
 const USE_ONLINE_TOKENS = false;
 
@@ -119,6 +119,23 @@ export async function createServer(
     );
 
     const countData = await Product.count({ session });
+    console.log(countData,'countedsfsdf')
+    res.status(200).send(countData);
+  });
+
+  app.get("/api/products/", async (req, res) => {
+    const session = await Shopify.Utils.loadCurrentSession(
+      req,
+      res,
+      app.get("use-online-tokens")
+    );
+    const Products  = await import(
+      `@shopify/shopify-api/dist/rest-resources/${Shopify.Context.API_VERSION}/index.js`
+    );
+
+    console.log(await Products.Page.count({ session }),'Products');
+    const countData = await Products.all({ session });
+    console.log(countData,'jkkk')
     res.status(200).send(countData);
   });
 
@@ -140,6 +157,7 @@ export async function createServer(
     }
     res.status(status).send({ success: status === 200, error });
   });
+
 
   // All endpoints after this point will have access to a request.body
   // attribute, as a result of the express.json() middleware
