@@ -11,7 +11,7 @@ import { setupGDPRWebHooks } from "./gdpr.js";
 import productCreator from "./helpers/product-creator.js";
 import redirectToAuth from "./helpers/redirect-to-auth.js";
 import { BillingInterval } from "./helpers/ensure-billing.js";
-import { AppInstallations } from "./app_installations.js";  
+import { AppInstallations } from "./app_installations.js";
 
 const USE_ONLINE_TOKENS = false;
 
@@ -34,7 +34,7 @@ Shopify.Context.initialize({
   // This should be replaced with your preferred storage strategy
   // See note below regarding using CustomSessionStorage with this template.
   SESSION_STORAGE: new Shopify.Session.SQLiteSessionStorage(DB_PATH),
-  ...(process.env.SHOP_CUSTOM_DOMAIN && {CUSTOM_SHOP_DOMAINS: [process.env.SHOP_CUSTOM_DOMAIN]}),
+  ...(process.env.SHOP_CUSTOM_DOMAIN && { CUSTOM_SHOP_DOMAINS: [process.env.SHOP_CUSTOM_DOMAIN] }),
 });
 
 // NOTE: If you choose to implement your own storage strategy using
@@ -119,24 +119,22 @@ export async function createServer(
     );
 
     const countData = await Product.count({ session });
-    console.log(countData,'countedsfsdf')
+    console.log(countData, 'countedsfsdf')
     res.status(200).send(countData);
   });
 
-  app.get("/api/products/", async (req, res) => {
+  app.get("/api/pages", async (req, res) => {
     const session = await Shopify.Utils.loadCurrentSession(
       req,
       res,
       app.get("use-online-tokens")
     );
-    const Products  = await import(
+    const { Page } = await import(
       `@shopify/shopify-api/dist/rest-resources/${Shopify.Context.API_VERSION}/index.js`
     );
 
-    console.log(await Products.Page.count({ session }),'Products');
-    const countData = await Products.all({ session });
-    console.log(countData,'jkkk')
-    res.status(200).send(countData);
+    const pagesAll = await Page.all({ session });
+    res.status(200).send(pagesAll);
   });
 
   app.get("/api/products/create", async (req, res) => {
