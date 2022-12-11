@@ -31,45 +31,45 @@ export function StoreResourceList() {
   }, [handleQueryValueRemove, handleTaggedWithRemove]);
 
   const resourceName = {
-    singular: 'customer',
-    plural: 'customers',
+    singular: 'store',
+    plural: 'stores',
   };
 
   const items = [
     {
       id: 112,
-      url: 'customers/341',
-      name: 'Mae Jemison',
+      url: 'stores/341',
+      name: 'Green Velly',
       location: 'Decatur, USA',
-      latestOrderUrl: 'orders/1456',
+      tag:'Active'
     },
     {
       id: 212,
-      url: 'customers/256',
-      name: 'Ellen Ochoa',
+      url: 'stores/256',
+      name: 'Blue Heights',
       location: 'Los Angeles, USA',
-      latestOrderUrl: 'orders/1457',
+      tag:'Deactive'
     },
   ];
 
   const promotedBulkActions = [
     {
-      content: 'Edit customers',
+      content: 'Edit stores',
       onAction: () => console.log('Todo: implement bulk edit'),
     },
   ];
 
   const bulkActions = [
     {
-      content: 'Add tags',
+      content: 'Active',
       onAction: () => console.log('Todo: implement bulk add tags'),
     },
     {
-      content: 'Remove tags',
+      content: 'Deactive',
       onAction: () => console.log('Todo: implement bulk remove tags'),
     },
     {
-      content: 'Delete customers',
+      content: 'Delete stores',
       onAction: () => console.log('Todo: implement bulk delete'),
     },
   ];
@@ -141,10 +141,10 @@ export function StoreResourceList() {
   );
 
   function renderItem(item) {
-    const {id, url, name, location, latestOrderUrl} = item;
+    const {id, url, name, location, tag} = item;
     const media = <Avatar customer size="medium" name={name} />;
-    const shortcutActions = latestOrderUrl
-      ? [{content: 'View latest order', url: latestOrderUrl}]
+    const shortcutActions = url
+      ? [{content: 'View store'}]
       : null;
     return (
       <ResourceItem
@@ -154,6 +154,7 @@ export function StoreResourceList() {
         accessibilityLabel={`View details for ${name}`}
         shortcutActions={shortcutActions}
         persistActions
+        tag={tag}
       >
         <h1 variant="bodyMd" fontWeight="bold" as="h3">
           {name}
