@@ -1,6 +1,11 @@
-import {Page, Button, Card, Tabs} from '@shopify/polaris';
+import {Page, Button, Card, Tabs, SkeletonBodyText,  Layout} from '@shopify/polaris';
 import {useState, useCallback, React} from 'react';
+<<<<<<< HEAD
 import { AddStore, StoreLists, Support, StoreSettings, Instructions, StoreListItems, ImportExport, ProductsCard} from "../components";
+=======
+import { useNavigate, TitleBar, Loading } from "@shopify/app-bridge-react";
+import { AddStore, StoreLists, Support, StoreSettings, Instructions, StoreListItems, ImportExport } from "../components";
+>>>>>>> fb50e69aeb97ec0f394d2084e8a1460364278eac
 
 
 export default function HomePage() {
@@ -49,31 +54,15 @@ export default function HomePage() {
    
   ];
 
- 
-  return (
 
-    <Page
-      fullWidth
-      title="PW Store Locator"
-      primaryAction={
-        <Button
-          primary
-          connectedDisclosure={{
-            accessibilityLabel: 'Other save actions',
-            actions: [{content: 'Add New'}],
-          }}
-        >
-          Actions
-        </Button>
-      }
-    >
+const tabsMarkup = tabs.length  ? (
       <Card>
         <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
           <Card.Section>
           {
             (() => {
                 if (selected==0)
-                    return <ProductsCard />
+                    return <StoreListItems />
                 if (selected==1)
                      return <StoreSettings/>
                 if (selected==2)
@@ -91,7 +80,31 @@ export default function HomePage() {
           </Card.Section>
         </Tabs>
       </Card>
-    
+    ) :  <Card sectioned><Loading /><SkeletonBodyText /></Card>;
+
+
+  return (      
+    <Page fullWidth
+      title="PW Store Locator"
+      primaryAction={
+        <Button
+          primary
+          connectedDisclosure={{
+            accessibilityLabel: 'Other save actions',
+            actions: [{content: 'Add New'}],
+          }}
+        >
+          Actions
+        </Button>
+      }
+    >
+     < Layout>
+      <Layout.Section>
+          {tabsMarkup}
+      </Layout.Section>
+    </Layout>
+       
     </Page>
+    
   );
 }

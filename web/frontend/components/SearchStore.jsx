@@ -1,32 +1,35 @@
-import {Form, FormLayout, Checkbox, TextField, Button} from '@shopify/polaris';
+import {TextField, Select, Button, Card} from '@shopify/polaris';
 import {useState, useCallback} from 'react';
-import {Search} from './Search';
+import { usePlacesWidget } from "react-google-autocomplete";
+
 
 export function SearchStore() {
-  const [value, setValue] = useState('');
+  const [textFieldValue, setTextFieldValue] = useState('');
 
-  const handleSubmit = useCallback((_event) => {
-    console.log(value);
-    setValue('');
-  }, [value]);
+  const handleTextFieldChange = useCallback(
+    (value) => setTextFieldValue(value),
+    [],
+  );
 
-  const handleSearchChange = useCallback((value) => setValue(value), []);
+  const GOOGLE_MAPS_API = 'AIzaSyCSsralNzLi0EdDsuVo33gvF4uubLM6x4w';
 
-//   const GOOGLE_MAPS_API = 'AIzaSyCSsralNzLi0EdDsuVo33gvF4uubLM6x4w';
+  const { ref } = usePlacesWidget({
+    apiKey:GOOGLE_MAPS_API,
+    onPlaceSelected: (place) => {
+      console.log(place);
+    }
+  });
 
-//   const {ref}  = usePlacesWidget({
-//     apiKey: GOOGLE_MAPS_API,
-//     onPlaceSelected: (place) => {
-//       console.log(place,'hii');
-//     }
-//   });
+  console.log(ref,'reff');
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <FormLayout.Group>
-        <Search />        
-        <Button submit>Submit</Button>
-      </FormLayout.Group>
-    </Form>
+    <TextField
+    label="Search Store Address"
+      type="input"
+      value={textFieldValue}
+      onChange={handleTextFieldChange}
+      ref={ref}
+      connectedRight={<Button>Submit</Button>}
+    />
   );
 }

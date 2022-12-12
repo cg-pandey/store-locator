@@ -1,53 +1,43 @@
-import { useState, useCallback, useEffect } from "react";
-import {
-    Select
-} from "@shopify/polaris";
-import { Toast } from "@shopify/app-bridge-react";
-import { useAppQuery, useAuthenticatedFetch } from "../hooks";
+import { Select } from "@shopify/polaris";
+import { useAppQuery} from "../hooks";
 
-export function PagesCard() {
-  const emptyToastProps = { content: null };
-  const [optionsValues, setOptionsValues] = useState(['Select']);
-  const [isLoading, setIsLoading] = useState(true);
-  const [toastProps, setToastProps] = useState(emptyToastProps);
-  const fetch = useAuthenticatedFetch();
-  const [selected, setSelected] = useState();
-  const handleSelectChange = useCallback((value) => setSelected(value), []);
-
- const {
+export function PagesFetch() {
+  const {
     data,
-    refetch: refetchProductCount,
-    isLoading: isLoadingCount,
-    isRefetching: isRefetchingCount,
+    isError,
+    isSuccess,
+    isLoading,
+    error
   } = useAppQuery({
-    url: `/api/pages`,
+    url: "/api/pages",
     reactQueryOptions: {
-      onSuccess: () => {
-        setIsLoading(false);
-      },
+      staleTime: 60000
     },
   });
 
-//   console.log(data, refetchProductCount,'ddd',isLoadingCount, 'gg',isRefetchingCount,'pagesfetch')
+  if(isLoading){
+    console.log('Loading...');
+    return <Select label="Select Page" options={["Loading..."]}  />
+  }
 
-useEffect(async () => {
-    await refetchProductCount()
-    let optionsValues = data.map(page => {
-        return {label : page.title, value : page.handle};
-       });
-    setOptionsValues(optionsValues);
-  }, [data]);
+  if(isError){
+    console.log('Error...');
+    return <div>Error...</div>
+  }
+
+let options = data.map(page => {
+  return  {label: page.title, value : page.handle }
+})
+
+options.unshift({label : 'Select'});
 
 
    return (
     <>
       <Select
-                label="Select Page"
-                style={{padding:'10px'}}
-                options={optionsValues}
-                onChange={handleSelectChange}
-                value={selected}
-            />
+          label="Select Page"
+          options={options}
+      />
     </>
   );
 }
