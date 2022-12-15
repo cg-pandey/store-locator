@@ -1,56 +1,98 @@
-import {Form, FormLayout, TextField, Button} from '@shopify/polaris';
+import {Form, FormLayout, TextField, Button,} from '@shopify/polaris';
 import {useState, useCallback} from 'react';
+import { Toast } from "@shopify/app-bridge-react";
+import { useForm, useField, notEmptyString } from "@shopify/react-form";
+import { useSupportForm } from '../hooks/useServerQuery';
+import { useAppQuery} from "../hooks";
+
 
 export function SupoortOnSubmit() {
-const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+  // const emptyToastProps = { content: null };
+  // const [toastProps, setToastProps] = useState(emptyToastProps);
+  const { mutate, data, isLoading, isError, isSuccess, isFetching } = useSupportForm()
 
-  const handleSubmit = useCallback((_event) => {
-    console.log(_event, name,email,message);
-    setName('');
-    setEmail('');
-    setMessage('');
-  }, [name,email,message]);
+  const onSubmit = (body) => {
+    body = JSON.stringify(body);
+    console.log(body, 'body')
+
+    mutate({
+      url: "https://prpwebs.com/wp-json/store_locator/v1/support",
+      formData : body
+    })
+
+    reset();
+
+  };
 
 
-const handleNameChange = useCallback((value) => setName(value));
-const handleEmailChange = useCallback((value) => setEmail(value));
-const handleMessageChange = useCallback((value) => setMessage(value));
+
+const {
+  fields: {
+    name,
+    email,
+    message,
+  },
+  submit,
+  reset,
+} = useForm({
+  fields: {
+    name: useField({
+      value: "",
+      validates: [notEmptyString("Please name your name")],
+    }),
+    email: useField({
+      value: "",
+      validates: [notEmptyString("Please add your store email ")],
+    }),
+    message: useField(""),
+  },
+  onSubmit,
+});
+
+
+// if(isLoading){
+//   console.log('Loading...');
+//   return <div>Loading....</div>
+// }
+
+let toastMarkup = isSuccess ? (
+  <Toast content={data.msg} onDismiss={() => false} />
+) : null;
+
+console.log(isSuccess, {...isLoading});
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <>
+    <Form onSubmit={submit}>
       <FormLayout>
       <TextField
       label="Name"
-      value={name}
+      {...name}
       autoComplete="off"
-      onChange={handleNameChange}
     />
         <TextField
-          value={email}
+          {...email}
           label="Email"
           type="email"
-          autoComplete="email"          
-      onChange={handleEmailChange}
+          autoComplete="email"
           helpText={
             <span>
-              We’ll use this email address to inform you on future changes to
-              Polaris.
+              We’ll use this email address to respond.
             </span>
           }
         />
 
         <TextField
         label="Message"
-        value={message}
+        {...message}
         multiline={4}
         autoComplete="off"
-        onChange={handleMessageChange}
         />
-
-        <Button submit>Submit</Button>
+        {isLoading ? <Button loading>Submit</Button> : <Button submit>Submit</Button> }
+        
       </FormLayout>
     </Form>
+        {toastMarkup}
+    </>
   );
 }

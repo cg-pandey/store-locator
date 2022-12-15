@@ -39,7 +39,7 @@ export function AppBridgeProvider({ children }) {
       new URLSearchParams(location.search).get("host") ||
       window.__SHOPIFY_DEV_HOST;
 
-    window.__SHOPIFY_DEV_HOST = host;
+      window.__SHOPIFY_DEV_HOST = host;
 
     return {
       host,

@@ -1,10 +1,13 @@
-import {Page, Button, Card, Tabs} from '@shopify/polaris';
+import {Page, Button, Card, Tabs, SkeletonBodyText,  Layout} from '@shopify/polaris';
 import {useState, useCallback, React} from 'react';
-import { AddStore, StoreLists, Support, StoreSettings, Instructions, StoreListItems, ImportExport, ProductsCard, PagesCard } from "../components";
+import { useNavigate, TitleBar, Loading } from "@shopify/app-bridge-react";
+import { Support, StoreSettings, Instructions, StoreListItems, ImportExport } from "../components";
 
 
 export default function HomePage() {
-
+  
+  const [active, setActive] = useState(false);
+  const navigate = useNavigate();
   const [selected, setSelected] = useState(0);
   const [menu, setMenu] = useState(1);
 
@@ -12,6 +15,10 @@ export default function HomePage() {
     (selectedTabIndex) => setSelected(selectedTabIndex),
   );
 
+
+    // this function active deactive button on top bar
+  const handleToggle = useCallback(() => setActive((active) => !active), []);
+  const contentStatus = active ? 'Deactivate' : 'Activate';
 
   const tabs = [
     {
@@ -40,58 +47,60 @@ export default function HomePage() {
       id: 'support_tab',
       content: 'Support',
       panelID: 'support_tab_panel',
-    },
-    {
-      id: 'addstore_tab',
-      content: 'Add Store',
-      panelID: 'addstore_tab_panel',
     }
    
   ];
 
- 
-  return (
 
-    <Page
-      fullWidth
-      title="PW Store Locator"
-      primaryAction={
-        <Button
-          primary
-          connectedDisclosure={{
-            accessibilityLabel: 'Other save actions',
-            actions: [{content: 'Add New'}],
-          }}
-        >
-          Actions
-        </Button>
-      }
-    >
+const tabsMarkup = tabs.length  ? (
       <Card>
         <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
-          <Card.Section>
+          {/* <Card.Section> */}
           {
             (() => {
                 if (selected==0)
-                    return <ProductsCard />
+                    return <StoreListItems />
                 if (selected==1)
                      return <StoreSettings/>
                 if (selected==2)
-                     return <PagesCard />
+                     return <Instructions />
                 if (selected==3)
                      return <ImportExport/>
                 if (selected==4)
                      return <Support />
-                if (selected==5)
-                     return <AddStore />
-                else
+                 else
                     return <StoreListItems />
             })()
           }       
-          </Card.Section>
+          {/* </Card.Section> */}
         </Tabs>
       </Card>
-    
+    ) :  <Card sectioned><Loading /><SkeletonBodyText /></Card>;
+
+
+  return (      
+    <Page fullWidth>
+      <TitleBar
+        title="PW Store Locator"
+        primaryAction={{
+          content: "Create New Store",
+          onAction: () => navigate("/stores/new"),
+        }}
+        secondaryActions={[
+          {
+            content: contentStatus,
+            onAction: handleToggle,
+            destructive: active ? true : false
+          }
+        ]}
+      />
+     < Layout>
+      <Layout.Section>
+          {tabsMarkup}
+      </Layout.Section>
+    </Layout>
+       
     </Page>
+    
   );
 }

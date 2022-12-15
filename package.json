@@ -1,5 +1,5 @@
 {
-  "name": "pw-store-locator-app-2",
+  "name": "pw-store-locator-app",
   "version": "1.0.0",
   "main": "web/index.js",
   "license": "UNLICENSED",
@@ -14,6 +14,7 @@
   "dependencies": {
     "@shopify/app": "3.24.1",
     "@shopify/cli": "3.24.1",
+    "graphql": "^16.6.0",
     "react-google-autocomplete": "^2.7.1"
   },
   "author": "Admin"

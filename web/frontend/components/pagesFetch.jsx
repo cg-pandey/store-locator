@@ -1,58 +1,43 @@
-import { useState } from "react";
-import {
-  Card,
-  Heading,
-  TextContainer,
-  DisplayText,
-  TextStyle,
-} from "@shopify/polaris";
-import { Toast } from "@shopify/app-bridge-react";
-import { useAppQuery, useAuthenticatedFetch } from "../hooks";
+import { Select } from "@shopify/polaris";
+import { useAppQuery} from "../hooks";
 
-export function PagesCard() {
-  const emptyToastProps = { content: null };
-//   const [isLoading, setIsLoading] = useState(true);
-  const [toastProps, setToastProps] = useState(emptyToastProps);
-  const fetch = useAuthenticatedFetch();
-
+export function PagesFetch() {
   const {
     data,
-    refetch: refetchProductCount,
-    isLoading: isLoadingCount,
-    isRefetching: isRefetchingCount,
+    isError,
+    isSuccess,
+    isLoading,
+    error
   } = useAppQuery({
-    url: `/api/products/`,
+    url: "/api/pages",
     reactQueryOptions: {
-      onSuccess: () => {
-        setIsLoading(false);
-      },
+      staleTime: 60000
     },
   });
 
-  console.log(data, refetchProductCount,'ddd',isLoadingCount, 'gg',isRefetchingCount,'jkkkk')
+  if(isLoading){
+    console.log('Loading...');
+    return <Select label="Select Page" options={["Loading..."]}  />
+  }
 
-  const toastMarkup = toastProps.content && !isRefetchingCount && (
-    <Toast {...toastProps} onDismiss={() => setToastProps(emptyToastProps)} />
-  );
+  if(isError){
+    console.log('Error...');
+    return <div>Error...</div>
+  }
 
-  return (
+let options = data.map(page => {
+  return  {label: page.title, value : page.handle }
+})
+
+options.unshift({label : 'Select'});
+
+
+   return (
     <>
-      {toastMarkup}
-      <Card
-        title="Product Counter"
-        sectioned
-        >
-        <TextContainer spacing="loose">
-          <Heading element="h4">
-            TOTAL Pages
-            <DisplayText size="medium">
-              <TextStyle variation="strong">
-                {isLoadingCount ? "-" : data.count}
-              </TextStyle>
-            </DisplayText>
-          </Heading>
-        </TextContainer>
-      </Card>
+      <Select
+          label="Select Page"
+          options={options}
+      />
     </>
   );
 }

@@ -29,7 +29,7 @@ export function ProductsCard() {
     },
   });
 
-  console.log(refetchProductCount,'ddd',isLoadingCount, 'gg',isRefetchingCount,'jkkkk')
+  // console.log(refetchProductCount,'ddd',isLoadingCount, 'gg',isRefetchingCount,'jkkkk')
 
   const toastMarkup = toastProps.content && !isRefetchingCount && (
     <Toast {...toastProps} onDismiss={() => setToastProps(emptyToastProps)} />
@@ -68,14 +68,6 @@ export function ProductsCard() {
             Sample products are created with a default title and price. You can
             remove them at any time.
           </p>
-          <Heading element="h4">
-            TOTAL PRODUCTS
-            <DisplayText size="medium">
-              <TextStyle variation="strong">
-                {isLoadingCount ? "-" : data.count}
-              </TextStyle>
-            </DisplayText>
-          </Heading>
           <Heading element="h4">
             TOTAL PRODUCTS
             <DisplayText size="medium">
